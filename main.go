@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/Accelertor/Kurumirai/backend"
 )
 
 func main() {
@@ -10,6 +12,6 @@ func main() {
 		fmt.Println("Usage: go run main.go <port>")
 		return
 	}
-	server := NewChatServer(":" + os.Args[1])
+	server := backend.NewChatServer(":" + os.Args[1])
 	server.Start()
 }
