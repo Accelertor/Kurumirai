@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 )
 
 type ChatServer struct {
@@ -43,4 +45,18 @@ func (cs *ChatServer) Start() {
 		cs.peers.Store(conn.RemoteAddr().String(), conn)
 		go handleConnection(cs, conn)
 	}
+}
+func handleShutdown(cs *ChatServer, listener net.Listener) {
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
+	<-sigChan
+	fmt.Println("\nShutting down server...")
+	listener.Close()
+	cs.peers.Range(func(_, value any) bool {
+		conn := value.(net.Conn)
+		conn.Close()
+		return true
+	})
+	close(cs.quit)
+	os.Exit(0)
 }

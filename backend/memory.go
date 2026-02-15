@@ -6,7 +6,7 @@ import (
 )
 
 var arena = sync.Pool{
-	New: func() interface{} {
+	New: func() any {
 		buf := make([]byte, 4096)
 		return &buf
 	},
