@@ -12,6 +12,6 @@ func main() {
 		fmt.Println("Usage: go run main.go <port>")
 		return
 	}
-	server := backend.NewChatServer(":" + os.Args[1])
+	server := backend.NewServer(":" + os.Args[1])
 	server.Start()
 }
